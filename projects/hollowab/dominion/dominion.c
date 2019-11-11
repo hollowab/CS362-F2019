@@ -688,9 +688,10 @@ int minecardEffect(int choice1, int choice2, struct gameState *state, int handPo
     int currentPlayer = whoseTurn(state);
     j = state->hand[currentPlayer][choice1];  //store card we will trash
 
-    if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold){
-        return -1;
-    }
+//    if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold){
+//        return -1;
+//    }
+    
 
     if (choice2 > treasure_map || choice2 < curse){
         return -1;
@@ -779,21 +780,22 @@ int minioncardEffect(int choice1, int choice2, struct gameState *state, int hand
     int currentPlayer = whoseTurn(state);
     
     state->numActions++;
-
         //discard card from hand
-        discardCard(handPos, currentPlayer, state, 0);
-
+       discardCard(handPos, currentPlayer, state, 0);
+        
 		if (choice1)
         {
             state->coins = state->coins + 2;
         }
+        
         else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
         {
             //discard hand
             while(numHandCards(state) > 0)
             {
-        //        discardCard(handPos, currentPlayer, state, 0);
+            //    discardCard(handPos, currentPlayer, state, 0);
             }
+
 
             //draw 4
             for (i = 0; i < 4; i++)
@@ -810,7 +812,8 @@ int minioncardEffect(int choice1, int choice2, struct gameState *state, int hand
                         //discard hand
                         while( state->handCount[i] > 0 )
                         {
-                            discardCard(handPos, i, state, 0);
+                            state->handCount[i] = 0;
+                        //    discardCard(handPos, i, state, 0);
                         }
 
                         //draw 4
@@ -820,8 +823,7 @@ int minioncardEffect(int choice1, int choice2, struct gameState *state, int hand
                         }
                     }
                 }
-          //  }
-
+        //    }
         }
         return 0;
 }
@@ -831,7 +833,7 @@ int tributecardEffect(struct gameState *state){
     int currentPlayer = whoseTurn(state); 
     int nextPlayer = currentPlayer;
     int tributeRevealedCards[2] = {-1, -1};
-
+    
     if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
             if (state->deckCount[nextPlayer] > 0) {
                 tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -848,7 +850,6 @@ int tributecardEffect(struct gameState *state){
                 }
             }
         }
-
         else {
             if (state->deckCount[nextPlayer] == 0) {
                 for (i = 0; i < state->discardCount[nextPlayer]; i++) {
@@ -869,8 +870,10 @@ int tributecardEffect(struct gameState *state){
         }
 
         if (tributeRevealedCards[0] == tributeRevealedCards[1]) { //If we have a duplicate card, just drop one
-            state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
+
+        //    state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
             state->playedCardCount++;
+
             tributeRevealedCards[1] = -1;
         }
 
